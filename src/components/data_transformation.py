@@ -10,8 +10,9 @@ from sklearn.preprocessing import OneHotEncoder,StandardScaler
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object
 import os
+
+from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
@@ -23,7 +24,7 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         '''
-        This function is responsible for data trnasformation
+        This function si responsible for data trnasformation
         
         '''
         try:
@@ -121,3 +122,4 @@ class DataTransformation:
             )
         except Exception as e:
             raise CustomException(e,sys)
+
