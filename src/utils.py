@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import OneHotEncoder  # Import OneHotEncoder for preprocessing
 from src.exception import CustomException  # Ensure CustomException is implemented correctly
 
 def save_object(file_path, obj):
@@ -13,6 +14,27 @@ def save_object(file_path, obj):
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file_obj:
             pickle.dump(obj, file_obj)
+    except Exception as e:
+        raise CustomException(e, sys)
+
+def load_object(file_path):
+    """Load a Python object from a pickle file."""
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
+    except Exception as e:
+        raise CustomException(e, sys)
+
+def preprocess_data(df):
+    """Preprocess the input DataFrame by encoding categorical variables."""
+    try:
+        # Identify categorical columns (you can customize this as needed)
+        categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
+        
+        # One-hot encode categorical columns
+        df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+
+        return df
     except Exception as e:
         raise CustomException(e, sys)
 
@@ -40,13 +62,5 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, param_grids):
             report[model_name] = test_score
 
         return report
-    except Exception as e:
-        raise CustomException(e, sys)
-
-def load_object(file_path):
-    """Load a Python object from a pickle file."""
-    try:
-        with open(file_path, "rb") as file_obj:
-            return pickle.load(file_obj)
     except Exception as e:
         raise CustomException(e, sys)
