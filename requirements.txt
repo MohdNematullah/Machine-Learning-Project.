@@ -2,4 +2,5 @@ numpy
 pandas
 seaborn
 dill
+flask
 -e .
